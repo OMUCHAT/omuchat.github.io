@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { confetti } from '@neoconfetti/svelte';
 	import { enhance } from '$app/forms';
-	import type { PageData, ActionData } from './$types';
+	import { confetti } from '@neoconfetti/svelte';
+	import type { ActionData, PageData } from './$types';
 	import { reduced_motion } from './reduced-motion';
 
 	export let data: PageData;
@@ -58,9 +58,7 @@
 	 * if client-side JavaScript is enabled
 	 */
 	function update(event: MouseEvent) {
-		const key = (event.target as HTMLButtonElement).getAttribute(
-			'data-key'
-		);
+		const key = (event.target as HTMLButtonElement).getAttribute('data-key');
 
 		if (key === 'backspace') {
 			currentGuess = currentGuess.slice(0, -1);
