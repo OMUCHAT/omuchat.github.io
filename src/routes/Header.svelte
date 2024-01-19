@@ -1,129 +1,139 @@
 <script>
 	import { page } from '$app/stores';
+	import Tooltip from '$lib/components/Tooltip.svelte';
 	import github from '$lib/images/github.svg';
-	import logo from '$lib/images/svelte-logo.svg';
+	import title from '$lib/images/title.svg';
 </script>
 
 <header>
-	<div class="corner">
-		<a href="https://kit.svelte.dev">
-			<img src={logo} alt="SvelteKit" />
-		</a>
-	</div>
-
 	<nav>
-		<svg viewBox="0 0 2 3" aria-hidden="true">
-			<path d="M0,0 L1,2 C1.5,3 1.5,3 2,3 L2,0 Z" />
-		</svg>
+		<div class="title">
+			<a href="/">
+				<img src={title} alt="title" />
+			</a>
+		</div>
 		<ul>
-			<li aria-current={$page.url.pathname === '/' ? 'page' : undefined}>
-				<a href="/">Home</a>
-			</li>
-			<li aria-current={$page.url.pathname === '/about' ? 'page' : undefined}>
-				<a href="/about">About</a>
-			</li>
-			<li aria-current={$page.url.pathname.startsWith('/sverdle') ? 'page' : undefined}>
-				<a href="/sverdle">Sverdle</a>
-			</li>
+			<a href="/">
+				<li aria-current={$page.url.pathname === '/' ? 'page' : undefined}>
+					<i class="ti ti-download" />
+					ダウンロード
+				</li>
+			</a>
+			<a href="/apps">
+				<li aria-current={$page.url.pathname === '/apps' ? 'page' : undefined}>
+					<i class="ti ti-search" />
+					アプリを探す
+				</li>
+			</a>
+			<a href="/create">
+				<li aria-current={$page.url.pathname.startsWith('/create') ? 'page' : undefined}>
+					<i class="ti ti-user" />
+					アプリを作る
+				</li>
+			</a>
 		</ul>
-		<svg viewBox="0 0 2 3" aria-hidden="true">
-			<path d="M0,0 L0,3 C0.5,3 0.5,3 1,2 L2,0 Z" />
-		</svg>
+		<div class="corner">
+			<a href="https://github.com/OMUCHAT/omuchat-hub">
+				<Tooltip>
+					<span> OMUCHAT/omuchat-hub </span>
+				</Tooltip>
+				<img src={github} alt="GitHub" />
+			</a>
+		</div>
 	</nav>
-
-	<div class="corner">
-		<a href="https://github.com/sveltejs/kit">
-			<img src={github} alt="GitHub" />
-		</a>
-	</div>
 </header>
 
-<style>
+<style lang="scss">
 	header {
+		position: relative;
+		right: 0;
+		left: 0;
+		z-index: 100;
 		display: flex;
+		width: 100%;
+		height: fit-content;
+		padding: 1rem;
+		background: var(--color-bg-2);
+	}
+
+	nav {
+		container-type: inline-size;
+		position: sticky;
+		top: 0.5rem;
+		right: 0;
+		left: 0;
+		box-sizing: border-box;
+		display: flex;
+		flex: 1;
+		align-items: center;
 		justify-content: space-between;
+		width: 100%;
+		max-width: 64rem;
+		height: 3em;
+		margin: 0 auto;
+	}
+
+	li {
+		display: flex;
+		align-items: center;
+		height: 100%;
+		padding: 1rem;
+		font-size: 0;
+		font-weight: 700;
+		color: var(--color-text);
+		text-decoration: none;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+
+		&:hover {
+			color: var(--color-1);
+		}
+
+		&[aria-current='page'] {
+			color: var(--color-bg-2);
+			background: var(--color-1);
+		}
+	}
+
+	.title {
+		display: flex;
+		align-items: center;
+		height: 3em;
+		margin: 0 1rem;
+
+		img {
+			height: 1.1rem;
+		}
+	}
+
+	ul {
+		position: relative;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 3em;
+		padding: 0;
+		margin: 0;
+		list-style: none;
 	}
 
 	.corner {
 		width: 3em;
 		height: 3em;
+		margin-left: auto;
 	}
 
-	.corner a {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 100%;
-		height: 100%;
+	i {
+		font-size: 1.1rem;
 	}
 
-	.corner img {
-		width: 2em;
-		height: 2em;
-		object-fit: contain;
+	@container (min-width: 750px) {
+		li {
+			font-size: 0.8rem;
+		}
 	}
 
-	nav {
-		display: flex;
-		justify-content: center;
-		--background: rgba(255, 255, 255, 0.7);
-	}
-
-	svg {
-		width: 2em;
-		height: 3em;
-		display: block;
-	}
-
-	path {
-		fill: var(--background);
-	}
-
-	ul {
-		position: relative;
-		padding: 0;
-		margin: 0;
-		height: 3em;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		list-style: none;
-		background: var(--background);
-		background-size: contain;
-	}
-
-	li {
-		position: relative;
-		height: 100%;
-	}
-
-	li[aria-current='page']::before {
-		--size: 6px;
-		content: '';
-		width: 0;
-		height: 0;
-		position: absolute;
-		top: 0;
-		left: calc(50% - var(--size));
-		border: var(--size) solid transparent;
-		border-top: var(--size) solid var(--color-theme-1);
-	}
-
-	nav a {
-		display: flex;
-		height: 100%;
-		align-items: center;
-		padding: 0 0.5rem;
-		color: var(--color-text);
-		font-weight: 700;
-		font-size: 0.8rem;
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
+	a {
 		text-decoration: none;
-		transition: color 0.2s linear;
-	}
-
-	a:hover {
-		color: var(--color-theme-1);
 	}
 </style>

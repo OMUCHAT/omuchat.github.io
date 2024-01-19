@@ -1,4 +1,5 @@
 <script>
+	import ThemeProvider from '$lib/theme/ThemeProvider.svelte';
 	import Header from './Header.svelte';
 	import './styles.css';
 </script>
@@ -13,6 +14,7 @@
 	<footer>
 		<p>visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to learn SvelteKit</p>
 	</footer>
+	<ThemeProvider />
 </div>
 
 <style>
@@ -20,24 +22,26 @@
 		display: flex;
 		flex-direction: column;
 		min-height: 100vh;
+		overflow-y: auto;
+		background: var(--color-bg-1);
 	}
 
 	main {
-		flex: 1;
+		box-sizing: border-box;
 		display: flex;
+		flex: 1;
 		flex-direction: column;
-		padding: 1rem;
 		width: 100%;
 		max-width: 64rem;
+		padding: 1rem;
 		margin: 0 auto;
-		box-sizing: border-box;
 	}
 
 	footer {
 		display: flex;
 		flex-direction: column;
-		justify-content: center;
 		align-items: center;
+		justify-content: center;
 		padding: 12px;
 	}
 
@@ -45,7 +49,7 @@
 		font-weight: bold;
 	}
 
-	@media (min-width: 480px) {
+	@media (width >= 480px) {
 		footer {
 			padding: 12px 0;
 		}
