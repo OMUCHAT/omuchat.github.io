@@ -12,13 +12,11 @@
         "lint": "prettier --check . && eslint .",
         "format": "prettier --write ."
     },
-    "dependencies": {
+    "dependencies": {},
+    "devDependencies": {
         "@fontsource/noto-sans-jp": "^5.0.17",
         "@omuchatjs/chat": "^0.0.6",
-        "@tabler/icons-webfont": "^2.40.0"
-    },
-    "devDependencies": {
-        "@fontsource/fira-mono": "^4.5.10",
+        "@tabler/icons-webfont": "^2.40.0",
         "@neoconfetti/svelte": "^1.0.0",
         "@sveltejs/adapter-static": "^3.0.1",
         "@sveltejs/kit": "^2.0.0",
