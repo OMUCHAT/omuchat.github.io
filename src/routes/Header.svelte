@@ -13,14 +13,14 @@
 			</a>
 		</div>
 		<ul>
-			<a href="/">
-				<li aria-current={$page.url.pathname === '/' ? 'page' : undefined}>
+			<a href="/download">
+				<li aria-current={$page.url.pathname.startsWith('/download') ? 'page' : undefined}>
 					<i class="ti ti-download" />
 					ダウンロード
 				</li>
 			</a>
 			<a href="/apps">
-				<li aria-current={$page.url.pathname === '/apps' ? 'page' : undefined}>
+				<li aria-current={$page.url.pathname.startsWith('/apps') ? 'page' : undefined}>
 					<i class="ti ti-search" />
 					アプリを探す
 				</li>
@@ -118,8 +118,8 @@
 	}
 
 	.corner {
-		width: 3em;
-		height: 3em;
+		width: 2.5em;
+		height: 2.5em;
 		margin-left: auto;
 	}
 
