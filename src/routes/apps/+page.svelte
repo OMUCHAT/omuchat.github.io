@@ -1,8 +1,6 @@
 <script lang="ts">
 	import AppEntry from './AppEntry.svelte';
-	let apps: Array<{
-		name: string;
-	}> = Array.from({ length: 9 }, (_, i) => ({ name: `App ${i + 1}` }));
+	import apps from './apps.json';
 </script>
 
 <svelte:head>
@@ -17,7 +15,7 @@
 	</h1>
 	<div class="apps">
 		{#each apps as app, i (i)}
-			<AppEntry {...app} />
+			<AppEntry {app} />
 		{/each}
 	</div>
 </section>

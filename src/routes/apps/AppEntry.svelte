@@ -1,18 +1,36 @@
 <script lang="ts">
-	export let name: string;
+	import Tooltip from '$lib/components/Tooltip.svelte';
+	import type { App } from './app.js';
+
+	export let app: App;
+
+	function launch() {
+		window.location.href = app.url;
+	}
 </script>
 
 <article>
 	<div class="header">
 		<h2>
 			<i class="ti ti-user" />
-			{name}
+			{app.name}
 		</h2>
-		<button>
-			<i class="ti ti-download" />
-		</button>
+		<span>
+			<button>
+				<i class="ti ti-download" />
+				<Tooltip>
+					<p>アプリをダッシュボードに保存する</p>
+				</Tooltip>
+			</button>
+			<button on:click={launch}>
+				<i class="ti ti-player-play" />
+				<Tooltip>
+					<p>アプリを起動する</p>
+				</Tooltip>
+			</button>
+		</span>
 	</div>
-	<div class="description">
+	<div class="body">
 		<p>...</p>
 	</div>
 </article>
@@ -50,7 +68,7 @@
 		font-weight: 600;
 	}
 
-	.description {
+	.body {
 		display: flex;
 		width: 100%;
 		height: 10rem;
