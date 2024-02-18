@@ -1,7 +1,10 @@
 [
     {
         "name": "notifier",
-        "url": "/apps/notifier",
-        "icon": "apps/notifier/icon.png"
+        "url": "/apps/notifier"
+    },
+    {
+        "name": "quiz",
+        "url": "/apps/quiz"
     }
 ]
