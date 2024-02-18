@@ -3,7 +3,7 @@
 	import { onMount } from 'svelte';
 
 	const app = new App({
-		group: 'omuchat-hub.cc',
+		group: 'omuchat.cc',
 		name: 'notifier',
 		version: '1.0.0'
 	});
