@@ -12,14 +12,17 @@ devDependencies:
     specifier: ^1.0.0
     version: 1.0.0
   '@omuchatjs/chat':
-    specifier: ^0.0.6
-    version: 0.0.6
+    specifier: ^0.0.14
+    version: 0.0.14
+  '@omuchatjs/omu':
+    specifier: ^0.0.14
+    version: 0.0.14
   '@sveltejs/adapter-static':
     specifier: ^3.0.1
-    version: 3.0.1(@sveltejs/kit@2.5.0)
+    version: 3.0.1(@sveltejs/kit@2.4.3)
   '@sveltejs/kit':
-    specifier: ^2.0.0
-    version: 2.5.0(@sveltejs/vite-plugin-svelte@3.0.2)(svelte@4.2.10)(vite@5.1.1)
+    specifier: 2.4.3
+    version: 2.4.3(@sveltejs/vite-plugin-svelte@3.0.2)(svelte@4.2.10)(vite@5.1.1)
   '@sveltejs/vite-plugin-svelte':
     specifier: ^3.0.0
     version: 3.0.2(svelte@4.2.10)(vite@5.1.1)
@@ -503,14 +506,14 @@ packages:
       fastq: 1.17.1
     dev: true
 
-  /@omuchatjs/chat@0.0.6:
-    resolution: {integrity: sha512-Zbqgpb/5+m/rA9qvijj1QjOZJ0tvJRCK28t3rJ0j2QC1ONULWuytoNCkJDHIwYDcdWU4fE6i/8hmzj5+dk6RvA==}
+  /@omuchatjs/chat@0.0.14:
+    resolution: {integrity: sha512-cf7PuWb7Zosg06slJXs2ZjfperMF/dyF/4H381KL/CiEDJhM2TT0dTlYGUtRNb9flmimOtEAOwbRkWvD5xNQfQ==}
     dependencies:
-      '@omuchatjs/omu': 0.0.6
+      '@omuchatjs/omu': 0.0.14
     dev: true
 
-  /@omuchatjs/omu@0.0.6:
-    resolution: {integrity: sha512-KAhcKcoH7iRLUO0Ub7eAh/cLHfYcKch6BIeaCEDxrRZ5Xg+5y0Xk8cwpuJ+yDzzISXptYJxzAJNBNfNfsLwFLA==}
+  /@omuchatjs/omu@0.0.14:
+    resolution: {integrity: sha512-pIce+d7hMx0655f0PP1FM7+hjHXpaCJYSZKJOa7DTqQusrCL/9NEM37u1gfUyy1mmdgRL19kiTZ1v+NCSjEsmg==}
     dev: true
 
   /@pkgjs/parseargs@0.11.0:
@@ -632,16 +635,16 @@ packages:
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
     dev: true
 
-  /@sveltejs/adapter-static@3.0.1(@sveltejs/kit@2.5.0):
+  /@sveltejs/adapter-static@3.0.1(@sveltejs/kit@2.4.3):
     resolution: {integrity: sha512-6lMvf7xYEJ+oGeR5L8DFJJrowkefTK6ZgA4JiMqoClMkKq0s6yvsd3FZfCFvX1fQ0tpCD7fkuRVHsnUVgsHyNg==}
     peerDependencies:
       '@sveltejs/kit': ^2.0.0
     dependencies:
-      '@sveltejs/kit': 2.5.0(@sveltejs/vite-plugin-svelte@3.0.2)(svelte@4.2.10)(vite@5.1.1)
+      '@sveltejs/kit': 2.4.3(@sveltejs/vite-plugin-svelte@3.0.2)(svelte@4.2.10)(vite@5.1.1)
     dev: true
 
-  /@sveltejs/kit@2.5.0(@sveltejs/vite-plugin-svelte@3.0.2)(svelte@4.2.10)(vite@5.1.1):
-    resolution: {integrity: sha512-1uyXvzC2Lu1FZa30T4y5jUAC21R309ZMRG0TPt+PPPbNUoDpy8zSmSNVWYaBWxYDqLGQ5oPNWvjvvF2IjJ1jmA==}
+  /@sveltejs/kit@2.4.3(@sveltejs/vite-plugin-svelte@3.0.2)(svelte@4.2.10)(vite@5.1.1):
+    resolution: {integrity: sha512-nKNhUdt61vtD961kQpUk6vLDhpnV0yku5F1uYNWvrJYFV0+cGfmW7ol0JVMSjHMXlMtmmv2FTc+nPRrTFwb2UA==}
     engines: {node: '>=18.13'}
     hasBin: true
     requiresBuild: true
