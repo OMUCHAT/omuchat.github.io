@@ -3,5 +3,6 @@
         "css",
         "postcss",
         "svelte"
-    ]
+    ],
+    "files.insertFinalNewline": true,
 }
