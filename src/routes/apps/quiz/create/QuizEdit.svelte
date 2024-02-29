@@ -195,6 +195,7 @@
 		flex-direction: row;
 		justify-content: space-between;
 		padding: 1rem;
+		margin-right: 1rem;
 		background: var(--color-bg-1);
 		border-left: 2px solid var(--color-1);
 	}

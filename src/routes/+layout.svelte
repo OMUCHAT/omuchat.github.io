@@ -3,28 +3,30 @@
 	import ThemeProvider from '$lib/theme/ThemeProvider.svelte';
 	import Header from './Header.svelte';
 	import './styles.css';
+
+	const appMode = /\/apps\/./gm.test($page.url.pathname);
 </script>
 
-{#if /\/apps\/./gm.test($page.url.pathname)}
-    <div class="app">
-        <main>
-            <slot />
-        </main>
-        <ThemeProvider />
-    </div>
+{#if appMode}
+	<div class="app">
+		<main>
+			<slot />
+		</main>
+		<ThemeProvider />
+	</div>
 {:else}
-    <div class="app">
-        <Header />
+	<div class="app">
+		<Header />
 
-        <main>
-            <slot />
-        </main>
+		<main>
+			<slot />
+		</main>
 
-        <footer>
-            <p>visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to learn SvelteKit</p>
-        </footer>
-        <ThemeProvider />
-    </div>
+		<footer>
+			<p>visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to learn SvelteKit</p>
+		</footer>
+		<ThemeProvider />
+	</div>
 {/if}
 
 <style>

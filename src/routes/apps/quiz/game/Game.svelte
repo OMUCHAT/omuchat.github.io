@@ -2,42 +2,9 @@
 	import type { QuestionOption } from '../quiz.js';
 	import { screen } from '../stores.js';
 	import GameResult from './GameResult.svelte';
-	import { updateGame, type GameData } from './game.js';
+	import { next, type GameData } from './game.js';
 
 	export let game: GameData;
-
-	function next() {
-		if (game.currentQuestion < game.data.questions.length - 1) {
-			const time = new Date().getTime();
-			updateGame((game) => ({
-				...game,
-				times: {
-					...game.times,
-					[game.currentQuestion]: {
-						...game.times[game.currentQuestion],
-						end: time
-					},
-					[game.currentQuestion + 1]: {
-						start: time,
-						end: 0
-					}
-				},
-				currentQuestion: game.currentQuestion + 1
-			}));
-		} else {
-			updateGame((game) => ({
-				...game,
-				times: {
-					...game.times,
-					[game.currentQuestion]: {
-						...game.times[game.currentQuestion],
-						end: new Date().getTime()
-					}
-				},
-				status: 'finished'
-			}));
-		}
-	}
 
 	let options: [number, QuestionOption][] = [];
 

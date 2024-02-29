@@ -1,6 +1,9 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import AppEntry from './AppEntry.svelte';
-	import apps from './apps.json';
+	import { apps, loadApps } from './apps.js';
+
+	loadApps($page.url.origin);
 </script>
 
 <svelte:head>
@@ -10,7 +13,7 @@
 
 <section>
 	<h1>
-		アプリを探す
+		<b>アプリを探す</b>
 		<i class="ti ti-player-play" />
 	</h1>
 	<div class="apps">

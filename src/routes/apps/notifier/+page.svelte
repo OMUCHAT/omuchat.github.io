@@ -1,29 +1,9 @@
 <script lang="ts">
-	import { App, Client, events } from '@omuchatjs/chat';
 	import { onMount } from 'svelte';
-
-	const app = new App({
-		group: 'omuchat.cc',
-		name: 'notifier',
-		version: '1.0.0'
-	});
-	const client = new Client({
-		app
-	});
+	import { client } from './client.js';
 
 	let messages: string[] = [];
 	let audio: HTMLAudioElement;
-
-	client.on(events.MessageCreate, (message) => {
-		messages = [...messages, message.text].slice(-10);
-		console.log(message);
-		if (/^!ping/.test(message.text)) {
-			// play sound
-			audio.pause();
-			audio.currentTime = 0;
-			audio.play();
-		}
-	});
 
 	onMount(() => {
 		client.run();

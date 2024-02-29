@@ -1,11 +1,15 @@
 <script lang="ts">
 	import Tooltip from '$lib/components/Tooltip.svelte';
-	import type { App } from './app.js';
-
-	export let app: App;
+	import type { AppMetadata } from './app-metadata.js';
+	import { saveApp } from './apps.js';
+	export let app: AppMetadata;
 
 	function launch() {
 		window.location.href = app.url;
+	}
+
+	function save() {
+		saveApp(app);
 	}
 </script>
 
@@ -16,7 +20,7 @@
 			{app.name}
 		</h2>
 		<span>
-			<button>
+			<button on:click={save}>
 				<i class="ti ti-download" />
 				<Tooltip>
 					<p>アプリをダッシュボードに保存する</p>

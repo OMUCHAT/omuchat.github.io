@@ -3,7 +3,7 @@
 	"version": "0.0.1",
 	"scripts": {
 		"prepare": "svelte-kit sync",
-		"dev": "node scripts/register-apps.mjs & vite dev",
+		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
@@ -12,10 +12,14 @@
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write ."
 	},
+	"engines": {
+		"node": ">=20.11.0",
+		"pnpm": ">=8.15.3"
+	},
 	"dependencies": {},
 	"devDependencies": {
-		"@omuchatjs/omu": "^0.0.14",
-		"@omuchatjs/chat": "^0.0.14",
+		"@omuchatjs/omu": "^0.0.18",
+		"@omuchatjs/chat": "^0.0.18",
 		"@fontsource/noto-sans-jp": "^5.0.17",
 		"@tabler/icons-webfont": "^2.40.0",
 		"@neoconfetti/svelte": "^1.0.0",

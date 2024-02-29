@@ -1,16 +1,14 @@
 <script lang="ts">
 	import title from '$lib/images/title.svg';
 	import { onMount } from 'svelte';
+	import { client } from './client.js';
 
 	onMount(() => {
-		// check if websocket is available
-		const socket = new WebSocket('ws://127.0.0.1:26423/ws');
-		socket.onopen = () => {
-			socket.close();
-		};
-		socket.onerror = () => {
-			window.location.href = '/download';
-		};
+		client.omu.connection.addListener({
+			onDisconnect: () => {
+				window.location.href = '/download';
+			}
+		});
 	});
 </script>
 
