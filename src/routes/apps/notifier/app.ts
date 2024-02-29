@@ -7,5 +7,5 @@ export default (origin: string) => new AppMetadata({
     identifier: identifier.key(),
     name: 'Notifier',
     url: origin + '/apps/notifier',
-    icon: 'letter-q',
+    icon: 'bell',
 });

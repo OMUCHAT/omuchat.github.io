@@ -1,16 +1,31 @@
 <script lang="ts">
 	import Tooltip from '$lib/components/Tooltip.svelte';
+	import { onMount } from 'svelte';
 	import type { AppMetadata } from './app-metadata.js';
-	import { saveApp } from './apps.js';
+	import { appsTable } from './apps.js';
 	export let app: AppMetadata;
 
 	function launch() {
 		window.location.href = app.url;
 	}
 
-	function save() {
-		saveApp(app);
+	let alreadyAdded = false;
+
+	async function action() {
+		const old = await appsTable.get(app.key());
+		console.log(old);
+		if (old) {
+			appsTable.remove(app);
+			alreadyAdded = false;
+		} else {
+			appsTable.add(app);
+			alreadyAdded = true;
+		}
 	}
+
+	onMount(async () => {
+		alreadyAdded = !!appsTable.get(app.key());
+	});
 </script>
 
 <article>
@@ -20,8 +35,8 @@
 			{app.name}
 		</h2>
 		<span>
-			<button on:click={save}>
-				<i class="ti ti-download" />
+			<button on:click={action}>
+				<i class="ti ti-{alreadyAdded ? 'check' : 'plus'}" />
 				<Tooltip>
 					<p>アプリをダッシュボードに保存する</p>
 				</Tooltip>
