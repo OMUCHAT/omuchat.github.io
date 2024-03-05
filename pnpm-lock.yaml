@@ -12,11 +12,11 @@ devDependencies:
     specifier: ^1.0.0
     version: 1.0.0
   '@omuchatjs/chat':
-    specifier: ^0.0.18
-    version: 0.0.18
+    specifier: ^0.0.19
+    version: 0.0.19
   '@omuchatjs/omu':
-    specifier: ^0.0.18
-    version: 0.0.18
+    specifier: ^0.0.19
+    version: 0.0.19
   '@sveltejs/adapter-static':
     specifier: ^3.0.1
     version: 3.0.1(@sveltejs/kit@2.4.3)
@@ -506,14 +506,14 @@ packages:
       fastq: 1.17.1
     dev: true
 
-  /@omuchatjs/chat@0.0.18:
-    resolution: {integrity: sha512-lQEj4k0b3Our6FNkaOnM7T2dEkoLkjIsD3ZEQFqrxi5c9jdvyxP8B9IfsnjxXjIT70RV3ArdDbu2f5E4TkvppQ==}
+  /@omuchatjs/chat@0.0.19:
+    resolution: {integrity: sha512-aTC+F2AmN6gdiG4+wKRHlq/Po5R5kKZ2H49coNP0fUT7UG/gOH294m+KvRmQLI+fT+S93foEuGWc9+qbuRB+zQ==}
     dependencies:
-      '@omuchatjs/omu': 0.0.18
+      '@omuchatjs/omu': 0.0.19
     dev: true
 
-  /@omuchatjs/omu@0.0.18:
-    resolution: {integrity: sha512-bgooaciLV12iDOYn2V/DMJyxn0O1lxNL30qOVwJBHoPgSegdhiN0qglrMC9zDHJU9tRRhUbXzxUOkrztjLLMFg==}
+  /@omuchatjs/omu@0.0.19:
+    resolution: {integrity: sha512-VlzL2q5P1wjUSQodHD7ctrc3EKcyIJIAm3uiN+CiO3yJioWCkSqx0qrCGJczegrhn7vsuttrYMHxE6Z8mrjVEQ==}
     dev: true
 
   /@pkgjs/parseargs@0.11.0:

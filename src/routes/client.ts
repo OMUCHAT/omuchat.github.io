@@ -1,10 +1,10 @@
-import { browser } from "$app/environment";
-import { App, Client } from "@omuchatjs/chat";
+import { browser } from '$app/environment';
+import { App, Client } from '@omuchatjs/chat';
 
 const app = new App({
-    group: 'omuchat.cc',
+    group: 'cc.omuchat',
     name: 'page',
-    version: '1.0.0'
+    version: '1.0.0',
 });
 export const client = new Client({ app });
 

@@ -1,8 +1,9 @@
 export class Api {
-    static VERSION_MANIFEST = "https://gist.githubusercontent.com/am230/950b1da90a3b644265f36f809707f276/raw/omuchat-version.json";
+    static VERSION_MANIFEST =
+        'https://gist.githubusercontent.com/am230/950b1da90a3b644265f36f809707f276/raw/omuchat-version.json';
 
     public static async getVersions(): Promise<VersionManifest> {
-        return await fetch(Api.VERSION_MANIFEST).then(res => res.json());
+        return await fetch(Api.VERSION_MANIFEST).then((res) => res.json());
     }
 
     public static getPlatform(): string {
@@ -20,7 +21,7 @@ export class Api {
         }
         const ua = window.navigator.userAgentData;
         const os = ua.platform.toLowerCase();
-        return `${os}-x86_64`
+        return `${os}-x86_64`;
     }
 
     public static isMobile(): boolean {
@@ -52,8 +53,8 @@ export interface VersionManifest {
     notes: string;
     pub_date: string;
     platforms: {
-        [platform: string]: Platform
-    }
+        [platform: string]: Platform;
+    };
 }
 
 export interface Platform {

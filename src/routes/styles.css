@@ -69,17 +69,14 @@ button:focus:not(:focus-visible) {
     border: 0;
 }
 
-
 a {
     color: var(--color-1);
     text-decoration: none;
-
 }
 
 a:hover {
     text-decoration: underline;
 }
-
 
 body {
     min-height: 100vh;

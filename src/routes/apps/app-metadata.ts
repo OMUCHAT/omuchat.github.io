@@ -1,4 +1,4 @@
-import type { Keyable, Model } from "@omuchatjs/omu/interface.js";
+import type { Keyable, Model } from '@omuchatjs/omu/interface.js';
 
 export type AppMetadataJson = {
     identifier: string;
@@ -6,7 +6,7 @@ export type AppMetadataJson = {
     name: string;
     author?: string;
     icon?: string;
-}
+};
 
 export class AppMetadata implements Keyable, Model<AppMetadataJson> {
     readonly identifier: string;

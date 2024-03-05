@@ -1,8 +1,4 @@
 {
-    "stylelint.validate": [
-        "css",
-        "postcss",
-        "svelte"
-    ],
-    "files.insertFinalNewline": true,
+    "stylelint.validate": ["css", "postcss", "svelte"],
+    "files.insertFinalNewline": true
 }

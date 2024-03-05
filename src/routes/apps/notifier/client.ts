@@ -1,21 +1,19 @@
-import { Client, events } from "@omuchatjs/chat";
-import { App } from "@omuchatjs/omu";
-import { ModelTableType } from "@omuchatjs/omu/extension/table/table.js";
-import { NotifyEntry } from "./model.js";
-import { identifier } from "./app.js";
+import { Client, events } from '@omuchatjs/chat';
+import { App } from '@omuchatjs/omu';
+import { identifier } from './app.js';
+import { NotifyEntry } from './model.js';
 
 const app = App.fromIdentifier(identifier, {
-    version: '1.0.0'
+    version: '1.0.0',
 });
 export const client = new Client({
-    app
+    app,
 });
 
-export const NotifyTable = client.omu.tables.register(ModelTableType.of(app, {
+export const NotifyTable = client.omu.tables.model(app, {
     name: 'notify',
     model: NotifyEntry,
-}))
-
+});
 
 client.on(events.MessageCreate, (message) => {
     console.log(message);

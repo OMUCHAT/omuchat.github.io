@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { client } from './client.js';
+    import { browser } from '$app/environment';
+    import { client } from './client.js';
 
-	onMount(() => {
-		client.run();
-	});
+    if (browser) {
+        client.run();
+    }
 </script>
 
 <h1>
-	Connecting...
-	<i class="ti ti-settings" />
+    Connecting...
+    <i class="ti ti-settings" />
 </h1>

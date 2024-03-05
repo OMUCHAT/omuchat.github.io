@@ -6,7 +6,7 @@ type Brand = {
 type NavigatorUAData = {
     readonly brands: Brand[];
     readonly mobile: boolean;
-    readonly platform: "Windows" | string;
+    readonly platform: 'Windows' | string;
 };
 
 interface Navigator {

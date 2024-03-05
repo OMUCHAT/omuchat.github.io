@@ -37,7 +37,7 @@ export async function createGame(quiz: Quiz) {
         currentQuestion: 0,
         times: {},
         players: {},
-        status: 'waiting'
+        status: 'waiting',
     }));
 }
 
@@ -74,14 +74,14 @@ export function next() {
                 ...game.times,
                 [game.currentQuestion]: {
                     ...game.times[game.currentQuestion],
-                    end: time
+                    end: time,
                 },
                 [game.currentQuestion + 1]: {
                     start: time,
-                    end: 0
-                }
+                    end: 0,
+                },
             },
-            currentQuestion: game.currentQuestion + 1
+            currentQuestion: game.currentQuestion + 1,
         }));
     } else {
         updateGame((game) => ({
@@ -90,10 +90,10 @@ export function next() {
                 ...game.times,
                 [game.currentQuestion]: {
                     ...game.times[game.currentQuestion],
-                    end: new Date().getTime()
-                }
+                    end: new Date().getTime(),
+                },
             },
-            status: 'finished'
+            status: 'finished',
         }));
     }
 }
@@ -136,8 +136,8 @@ client.on(events.MessageCreate, async (message) => {
             author: author.toJson(),
             answers: {
                 ...data.players[authorId]?.answers,
-                [game.currentQuestion]: answers
-            }
+                [game.currentQuestion]: answers,
+            },
         };
         return data;
     });
