@@ -48,8 +48,4 @@
         outline: 2px solid var(--color-bg-1);
         outline-offset: -4px;
     }
-
-    small {
-        font-size: 0.6rem;
-    }
 </style>

@@ -1,12 +1,10 @@
 <script lang="ts">
     import { browser } from '$app/environment';
-    import { client } from './client.js';
 
     let messages: string[] = [];
     let audio: HTMLAudioElement;
 
     if (browser) {
-        client.run();
         audio = new Audio('https://www.myinstants.com/media/sounds/roblox-death-sound_1.mp3');
     }
 </script>

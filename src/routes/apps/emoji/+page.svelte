@@ -1,25 +1,26 @@
 <script lang="ts">
     import { models } from '@omuchatjs/chat';
-    import { onMount } from 'svelte';
 
-    import { client, type Emoji } from './emoji.js';
     import EmojiEdit from './EmojiEdit.svelte';
     import EmojiEntry from './EmojiEntry.svelte';
+    import { client } from './client.js';
+    import { type EmojiData } from './emoji.js';
 
-    let emojis: Map<string, Emoji> = new Map();
-    const REGISTRY = client.omu.registry.get<Record<string, Emoji>>({
-        name: 'emojis',
-        app: 'omu.chat.plugins/emoji',
-    });
+    let emojis: Map<string, EmojiData> = new Map();
+    const REGISTRY = client.omu.registry.get<Record<string, EmojiData>>(
+        {
+            name: 'emojis',
+            app: 'omu.chat.plugins/emoji',
+        },
+        {},
+    );
     REGISTRY.listen((data) => {
         emojis = new Map(Object.entries(data || {}));
     });
-    client.run();
 
-    let selectedEmoji: Emoji | undefined;
+    let selectedEmoji: EmojiData | undefined;
     let search: string = '';
     let fileDrop: boolean = false;
-    let dragFiles: string[] = [];
     let uploading: number = 0;
 
     async function upload(files: Array<{ key: string; buffer: Uint8Array }>) {
@@ -40,26 +41,7 @@
         uploading--;
     }
 
-    onMount(async () => {
-        await waitForLoad();
-        listen(tauriEvent.TauriEvent.WINDOW_FILE_DROP, async (event) => {
-            if (event.windowLabel !== tauriWindow.appWindow.label) return;
-            fileDrop = false;
-            const files = await Promise.all(event.payload.map((path) => readFile(path)));
-            upload(files.map(([key, buffer]) => ({ key, buffer: new Uint8Array(buffer) })));
-        });
-        listen(tauriEvent.TauriEvent.WINDOW_FILE_DROP_HOVER, (event) => {
-            if (event.windowLabel !== tauriWindow.appWindow.label) return;
-            fileDrop = true;
-            dragFiles = event.payload as string[];
-        });
-        listen(tauriEvent.TauriEvent.WINDOW_FILE_DROP_CANCELLED, (event) => {
-            if (event.windowLabel !== tauriWindow.appWindow.label) return;
-            fileDrop = false;
-        });
-    });
-
-    function deleteEmoji(event: CustomEvent<Emoji>) {
+    function deleteEmoji(event: CustomEvent<EmojiData>) {
         const emoji = event.detail;
         emojis.delete(emoji.id);
         REGISTRY.update((registry) => {
@@ -72,7 +54,7 @@
         }
     }
 
-    function saveEmoji(event: CustomEvent<Emoji>) {
+    function saveEmoji(event: CustomEvent<EmojiData>) {
         const emoji = event.detail;
         emojis.set(emoji.id, emoji);
         REGISTRY.update((registry) => {
@@ -83,27 +65,31 @@
         selectedEmoji = undefined;
     }
 
-    function editEmoji(event: CustomEvent<Emoji>) {
+    function editEmoji(event: CustomEvent<EmojiData>) {
         selectedEmoji = event.detail;
     }
 
-    function testEmoji(event: CustomEvent<Emoji>) {
+    function testEmoji(event: CustomEvent<EmojiData>) {
         const emoji = event.detail;
         const room = new models.Room({
             id: 'test',
-            name: 'テスト',
             provider_id: 'test',
-            online: false,
-            url: window.location.href,
+            connected: false,
+            status: 'offline',
+            created_at: new Date(),
         });
-        client.chat.rooms.set(room);
-        client.chat.messages.add(
+        client.rooms.set(room);
+        client.messages.add(
             new models.Message({
                 id: Date.now().toString(),
                 room_id: room.key(),
-                content: models.content.RootContent.of([
-                    models.content.TextContent.of(`${emoji.name} (${emoji.regex})`),
-                    models.content.ImageContent.of(emoji.image_url, emoji.id, emoji.name),
+                content: new models.content.Root([
+                    models.content.Text.of(`${emoji.id} (${emoji.regex})`),
+                    models.content.Image.of({
+                        url: emoji.image_url,
+                        id: emoji.id,
+                        name: emoji.id,
+                    }),
                 ]),
                 created_at: new Date(),
             }),
@@ -123,28 +109,6 @@
         );
         upload(selected);
     }
-
-    async function openFile() {
-        const selected = await tauriDialog.open({
-            multiple: true,
-            filters: [
-                {
-                    name: 'Images',
-                    extensions: ['png', 'webp', 'jpg', 'jpeg'],
-                },
-            ],
-        });
-        if (!selected) return;
-        const files = await Promise.all(
-            [...selected].map(async (file) => {
-                const name = file.split(/[\\/]/).pop();
-                if (!name) throw new Error('Invalid file path');
-                const buffer = await tauriFs.readBinaryFile(file);
-                return { key: name, buffer };
-            }),
-        );
-        upload(files);
-    }
 </script>
 
 <main>
@@ -154,7 +118,7 @@
             絵文字
         </div>
         <div class="search">
-            <InputTextLazy placeholder="検索" bind:value={search} />
+            <input placeholder="検索" bind:value={search} />
         </div>
     </div>
     {#if selectedEmoji}
@@ -168,21 +132,14 @@
                 <i class="ti ti-upload" />
                 画像をドラッグ&ドロップして追加できます。
             </small>
-            {#if isOnTauri}
-                <button class="upload-button" on:click={openFile}>
-                    <i class="ti ti-upload" />
-                    もしくはファイルを選択
-                </button>
-            {:else}
-                <input
-                    type="file"
-                    multiple
-                    hidden
-                    bind:files
-                    on:change={uploadFiles}
-                    accept="image/*"
-                />
-            {/if}
+            <input
+                type="file"
+                multiple
+                hidden
+                bind:files
+                on:change={uploadFiles}
+                accept="image/*"
+            />
             {#if uploading > 0}
                 <span>
                     <i class="ti ti-upload" />
@@ -190,7 +147,7 @@
                 </span>
             {/if}
         </div>
-        {#each Array.from(emojis.values()).filter((emoji) => emoji.name.includes(search)) as emoji}
+        {#each Array.from(emojis.values()).filter((emoji) => emoji.id.includes(search)) as emoji}
             <EmojiEntry {emoji} on:delete={deleteEmoji} on:edit={editEmoji} on:test={testEmoji} />
         {/each}
     </div>
@@ -199,11 +156,7 @@
             <i class="ti ti-upload" />
             ドロップして追加
         </div>
-        <div class="preview">
-            {#each dragFiles as file}
-                <img src={tauriApi.convertFileSrc(file)} alt="" />
-            {/each}
-        </div>
+        <div class="preview"></div>
     </div>
 </main>
 
@@ -266,20 +219,6 @@
         width: 100%;
         height: 40px;
 
-        .upload-button {
-            height: 32px;
-            padding: 0 10px;
-            color: var(--color-1);
-            cursor: pointer;
-            background: var(--color-bg-2);
-            border: 1px solid var(--color-1);
-
-            &:hover {
-                color: var(--color-bg-2);
-                background: var(--color-1);
-            }
-        }
-
         span {
             display: flex;
             flex-direction: row;
@@ -323,13 +262,6 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-
-            img {
-                height: 128px;
-                padding: 10px;
-                object-fit: cover;
-                border-radius: 5px;
-            }
         }
 
         &.active {

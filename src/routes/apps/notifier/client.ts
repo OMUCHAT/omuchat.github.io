@@ -2,6 +2,7 @@ import { Client, events } from '@omuchatjs/chat';
 import { App } from '@omuchatjs/omu';
 import { identifier } from './app.js';
 import { NotifyEntry } from './model.js';
+import { browser } from '$app/environment';
 
 const app = App.fromIdentifier(identifier, {
     version: '1.0.0',
@@ -21,3 +22,7 @@ client.on(events.MessageCreate, (message) => {
         // play sound
     }
 });
+
+if (browser) {
+    client.run();
+}
