@@ -1,67 +1,53 @@
 <script lang="ts">
-    import { createEventDispatcher } from 'svelte';
-
     import Tooltip from '$lib/components/Tooltip.svelte';
-    import type { Emoji } from './emoji.js';
+    import { client } from './client.js';
+    import { EMOJI_TABLE, deleteEmoji, editEmoji, testEmoji, type Emoji } from './emoji.js';
 
-    const dispatch = createEventDispatcher();
+    const emojis = client.omu.tables.get(EMOJI_TABLE);
 
-    export let emoji: Emoji;
+    export let entry: Emoji;
+    export let selected: boolean = false;
 
     function copyName() {
-        navigator.clipboard.writeText(emoji.name);
+        navigator.clipboard.writeText(entry.id);
     }
 
     function copyRegex() {
-        navigator.clipboard.writeText(emoji.regex);
-    }
-
-    function deleteEmoji() {
-        dispatch('delete', emoji);
-    }
-
-    function editEmoji() {
-        dispatch('edit', emoji);
-    }
-
-    function testEmoji() {
-        dispatch('test', emoji);
+        navigator.clipboard.writeText(JSON.stringify(entry.petterns));
     }
 </script>
 
-<div class="emoji-entry">
+<div class="emoji-entry" class:selected>
     <span>
         <Tooltip>
-            <img src={emoji.image_url} alt={emoji.name} class="preview" />
+            <img src={client.omu.assets.url(entry.asset)} alt={entry.asset.key()} class="preview" />
         </Tooltip>
-        <img src={emoji.image_url} alt={emoji.name} />
+        <img src={client.omu.assets.url(entry.asset)} alt={entry.asset.key()} />
     </span>
     <div class="info">
         <button class="name" on:click={copyName}>
             <Tooltip>クリックでコピー</Tooltip>
-            {emoji.name}
-            <i class="ti ti-copy" />
+            {entry.id}
         </button>
         <button class="regex" on:click={copyRegex}>
             <Tooltip>クリックでコピー</Tooltip>
-            {emoji.regex}
-            <i class="ti ti-copy" />
+            {JSON.stringify(entry.petterns)}
         </button>
     </div>
-    <div class="buttons">
-        <button on:click={testEmoji}>
+    {#if selected}
+        <button on:click={() => testEmoji(entry)}>
             <Tooltip>テスト</Tooltip>
             <i class="ti ti-send" />
         </button>
-        <button on:click={editEmoji}>
+        <button on:click={() => editEmoji(entry)}>
             <Tooltip>編集</Tooltip>
             <i class="ti ti-pencil" />
         </button>
-        <button on:click={deleteEmoji}>
+        <button on:click={() => deleteEmoji(entry)}>
             <Tooltip>削除</Tooltip>
             <i class="ti ti-trash" />
         </button>
-    </div>
+    {/if}
 </div>
 
 <style lang="scss">
@@ -72,14 +58,11 @@
         width: 100%;
         padding: 10px;
         background: var(--color-bg-2);
+        border-bottom: 1px solid var(--color-bg-1);
 
         .preview {
             height: auto;
             max-height: 128px;
-        }
-
-        .buttons {
-            display: none;
         }
 
         img {
@@ -88,34 +71,30 @@
             margin-right: 10px;
             object-fit: contain;
         }
+    }
 
-        .info {
-            display: flex;
-            flex: 1;
-            flex-direction: column;
-            align-items: flex-start;
-            justify-content: center;
-            margin-right: 10px;
-            margin-left: 5px;
+    .selected {
+        outline: 2px solid var(--color-1);
+        outline-offset: -5px;
+    }
 
-            .name {
-                font-size: 1em;
-                font-weight: bold;
-            }
+    .info {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        margin-right: 10px;
+        margin-left: 5px;
 
-            .regex {
-                font-size: 0.7em;
-                color: color-mix(in srgb, var(--color-text) 80%, transparent 0%);
-            }
+        .name {
+            font-size: 1em;
+            font-weight: bold;
         }
 
-        &:hover {
-            outline: 2px solid var(--color-1);
-            outline-offset: -5px;
-
-            .buttons {
-                display: flex;
-            }
+        .regex {
+            font-size: 0.7em;
+            color: color-mix(in srgb, var(--color-text) 80%, transparent 0%);
         }
     }
 
@@ -129,16 +108,8 @@
         background: none;
         border: none;
 
-        i {
-            display: none;
-        }
-
         &:hover {
             color: var(--color-1);
-
-            i {
-                display: block;
-            }
         }
     }
 </style>

@@ -2,10 +2,8 @@
     import title from '$lib/images/title.svg';
     import { client } from './client.js';
 
-    client.omu.connection.addListener({
-        onDisconnect: () => {
-            window.location.href = '/download';
-        },
+    client.omu.network.listeners.disconnected.subscribe(() => {
+        window.location.href = '/download';
     });
 </script>
 

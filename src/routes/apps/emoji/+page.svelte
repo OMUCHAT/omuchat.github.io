@@ -1,101 +1,46 @@
 <script lang="ts">
-    import { models } from '@omuchatjs/chat';
-
+    import TableList from '$lib/components/omu/TableList.svelte';
+    import { setClient } from '$lib/components/omu/client.js';
     import EmojiEdit from './EmojiEdit.svelte';
     import EmojiEntry from './EmojiEntry.svelte';
+    import { identifier } from './app.js';
     import { client } from './client.js';
-    import { type EmojiData } from './emoji.js';
+    import { EMOJI_TABLE, Emoji, selectedEmoji } from './emoji.js';
 
-    let emojis: Map<string, EmojiData> = new Map();
-    const REGISTRY = client.omu.registry.get<Record<string, EmojiData>>(
-        {
-            name: 'emojis',
-            app: 'omu.chat.plugins/emoji',
-        },
-        {},
-    );
-    REGISTRY.listen((data) => {
-        emojis = new Map(Object.entries(data || {}));
-    });
+    const emojis = client.omu.tables.get(EMOJI_TABLE);
 
-    let selectedEmoji: EmojiData | undefined;
     let search: string = '';
-    let fileDrop: boolean = false;
     let uploading: number = 0;
+
+    setClient(client.omu);
 
     async function upload(files: Array<{ key: string; buffer: Uint8Array }>) {
         uploading++;
-        files = files.map(({ key, buffer }) => ({ key: `emoji/${key}`, buffer }));
-        await client.omu.assets.upload(...files);
-        files.forEach(({ key }) => {
-            const name = key.split('/')[1].split('.')[0];
-            const emoji = {
-                id: key,
-                name: name,
-                regex: `${name}`,
-                image_url: client.omu.asset(key),
-            };
-            emojis.set(emoji.id, emoji);
+        const assets = await client.omu.assets.upload(
+            ...files.map(({ key, buffer }) => ({
+                identifier: identifier.join(key.split('.')[0]),
+                buffer,
+            })),
+        );
+        assets.forEach((identifier) => {
+            const name = identifier.path.at(-1);
+            if (!name) return;
+            const emoji = new Emoji({
+                id: name,
+                asset: identifier,
+                petterns: [
+                    {
+                        type: 'text',
+                        text: name,
+                    },
+                ],
+            });
+            emojis.add(emoji);
         });
-        REGISTRY.update((data) => ({ ...data, ...Object.fromEntries(emojis) }));
         uploading--;
     }
 
-    function deleteEmoji(event: CustomEvent<EmojiData>) {
-        const emoji = event.detail;
-        emojis.delete(emoji.id);
-        REGISTRY.update((registry) => {
-            if (!registry) return registry;
-            delete registry[emoji.id];
-            return registry;
-        });
-        if (selectedEmoji?.id === emoji.id) {
-            selectedEmoji = undefined;
-        }
-    }
-
-    function saveEmoji(event: CustomEvent<EmojiData>) {
-        const emoji = event.detail;
-        emojis.set(emoji.id, emoji);
-        REGISTRY.update((registry) => {
-            if (!registry) return registry;
-            registry[emoji.id] = emoji;
-            return registry;
-        });
-        selectedEmoji = undefined;
-    }
-
-    function editEmoji(event: CustomEvent<EmojiData>) {
-        selectedEmoji = event.detail;
-    }
-
-    function testEmoji(event: CustomEvent<EmojiData>) {
-        const emoji = event.detail;
-        const room = new models.Room({
-            id: 'test',
-            provider_id: 'test',
-            connected: false,
-            status: 'offline',
-            created_at: new Date(),
-        });
-        client.rooms.set(room);
-        client.messages.add(
-            new models.Message({
-                id: Date.now().toString(),
-                room_id: room.key(),
-                content: new models.content.Root([
-                    models.content.Text.of(`${emoji.id} (${emoji.regex})`),
-                    models.content.Image.of({
-                        url: emoji.image_url,
-                        id: emoji.id,
-                        name: emoji.id,
-                    }),
-                ]),
-                created_at: new Date(),
-            }),
-        );
-    }
-
+    let fileDrop: HTMLInputElement;
     let files: FileList | undefined;
 
     async function uploadFiles() {
@@ -121,24 +66,26 @@
             <input placeholder="検索" bind:value={search} />
         </div>
     </div>
-    {#if selectedEmoji}
+    {#if $selectedEmoji}
         <div class="emoji-edit">
-            <EmojiEdit emoji={selectedEmoji} on:save={saveEmoji} on:delete={deleteEmoji} />
+            <EmojiEdit emoji={$selectedEmoji} />
         </div>
     {/if}
     <div class="emojis">
         <div class="upload">
-            <small>
+            <button on:click={() => fileDrop.click()}>
+                ファイルを選択してアップロード
                 <i class="ti ti-upload" />
-                画像をドラッグ&ドロップして追加できます。
-            </small>
+            </button>
             <input
                 type="file"
                 multiple
                 hidden
                 bind:files
+                bind:this={fileDrop}
                 on:change={uploadFiles}
                 accept="image/*"
+                placeholder="画像を選択"
             />
             {#if uploading > 0}
                 <span>
@@ -147,21 +94,14 @@
                 </span>
             {/if}
         </div>
-        {#each Array.from(emojis.values()).filter((emoji) => emoji.id.includes(search)) as emoji}
-            <EmojiEntry {emoji} on:delete={deleteEmoji} on:edit={editEmoji} on:test={testEmoji} />
-        {/each}
-    </div>
-    <div class="drop" class:active={fileDrop}>
-        <div class="tips">
-            <i class="ti ti-upload" />
-            ドロップして追加
-        </div>
-        <div class="preview"></div>
+        <TableList table={emojis} component={EmojiEntry} />
     </div>
 </main>
 
 <style lang="scss">
     main {
+        position: absolute;
+        inset: 0;
         display: flex;
         flex-direction: column;
         height: 100%;
@@ -231,48 +171,7 @@
         }
     }
 
-    .drop {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-        opacity: 0;
-
-        .tips {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            z-index: 1;
-            display: flex;
-            flex-direction: row;
-            gap: 10px;
-            align-items: center;
-            padding: 10px;
-            font-weight: bold;
-            color: var(--color-1);
-            pointer-events: none;
-            background: var(--color-bg-2);
-        }
-
-        .preview {
-            position: fixed;
-            display: table;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-        }
-
-        &.active {
-            pointer-events: all;
-            background: color-mix(in srgb, var(--color-bg-1) 90%, transparent 0%);
-            opacity: 1;
-            transition: all 0.05s ease-in-out;
-        }
-    }
-
-    small {
+    button {
         display: flex;
         flex-direction: row;
         gap: 5px;
@@ -282,7 +181,9 @@
         font-size: 14px;
         font-weight: bold;
         color: var(--color-1);
+        cursor: pointer;
         background: var(--color-bg-2);
+        border: none;
 
         i {
             font-size: 1.2em;

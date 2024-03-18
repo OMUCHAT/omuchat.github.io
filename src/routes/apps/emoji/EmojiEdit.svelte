@@ -1,38 +1,31 @@
 <script lang="ts">
-    import { createEventDispatcher } from 'svelte';
-
-    import type { Emoji } from './emoji.js';
+    import { client } from './client.js';
+    import { deleteEmoji, saveEmoji, type Emoji } from './emoji.js';
 
     export let emoji: Emoji;
-
-    const dispatch = createEventDispatcher();
-
-    function saveEmoji() {
-        dispatch('save', emoji);
-    }
 </script>
 
 <div class="emoji-edit">
-    <img src={emoji.image_url} alt={emoji.name} />
+    <img src={client.omu.assets.url(emoji.asset)} alt={emoji.asset.key()} />
     <div class="inputs"></div>
     <div class="info">
         <span>
             name:
-            <input class="name" type="text" bind:value={emoji.name} placeholder="Name" />
+            <input class="name" type="text" bind:value={emoji.id} placeholder="Name" />
         </span>
         <span>
             regex:
-            <input class="regex" type="text" bind:value={emoji.regex} placeholder="Regex" />
+            <input class="regex" type="text" bind:value={emoji.petterns} placeholder="Regex" />
         </span>
     </div>
     <div class="buttons">
-        <button on:click={saveEmoji}>
+        <button on:click={() => saveEmoji(emoji)}>
             <div class="button">
                 Save
                 <i class="ti ti-upload" />
             </div>
         </button>
-        <button on:click={() => dispatch('delete', emoji)}>
+        <button on:click={() => deleteEmoji(emoji)}>
             <i class="ti ti-trash" />
         </button>
     </div>

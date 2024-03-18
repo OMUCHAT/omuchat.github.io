@@ -23,7 +23,7 @@
         }
     }
 
-    client.omu.connection.addTask(async () => {
+    client.omu.network.addTask(async () => {
         alreadyAdded = !!(await appsTable.get(app.key()));
     });
 </script>
