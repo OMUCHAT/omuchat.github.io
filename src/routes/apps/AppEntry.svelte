@@ -23,7 +23,7 @@
         }
     }
 
-    client.omu.network.addTask(async () => {
+    client.network.addTask(async () => {
         alreadyAdded = !!(await appsTable.get(app.key()));
     });
 </script>
@@ -31,7 +31,7 @@
 <article>
     <div class="header">
         <h2>
-            <i class="ti ti-user" />
+            <i class="ti ti-{app.icon}" />
             {app.name}
         </h2>
         <span>
@@ -84,7 +84,7 @@
     }
 
     h2 {
-        font-weight: 600;
+        font-weight: bold;
     }
 
     .body {
